@@ -1,6 +1,7 @@
 ﻿using AIHR.Domain;
+using AIHR.Domain.Dtos;
+using AIHR.Domain.Dtos.StudyPlan;
 using AIHR.Server.Database;
-using AIHR.Server.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

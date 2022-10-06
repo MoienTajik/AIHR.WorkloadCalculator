@@ -1,0 +1,44 @@
+@model IEnumerable<AIHR.Domain.Dtos.StudyPlan.StudyPlanDto>
+
+<ul>
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var studyPlan in Model.OrderBy(studyPlan => studyPlan.StartDate))
+            {
+                <div class="col-sm-4 mb-4" id="study-plan-@studyPlan.Id">
+                    <div class="card text-center" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @studyPlan.StartDate.Date.ToString("d") to @studyPlan.EndDate.Date.ToString("d")
+                            </h5>
+                            
+                            <p class="card-text text-success mb-2">
+                                <b>Your weekly learning must be: <br/> @studyPlan.LearningHoursPerWeek hours</b>
+                            </p>
+                            
+                            <small class="text-muted">
+                                Finish this course in <b>@studyPlan.TotalWeeksInSelectedDateRange weeks</b>
+                            </small>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            @foreach (var course in studyPlan.Courses)
+                            {
+                                <li class="list-group-item">@course.Name - @course.Duration</li>
+                            }
+                        </ul>
+
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-danger btn-sm delete-study-plan" onClick="deleteStudyPlan(@studyPlan.Id)">Delete Study Plan</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No study plan exist for this user.</p>
+    }
+</ul>

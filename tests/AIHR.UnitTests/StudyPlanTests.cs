@@ -10,7 +10,7 @@ public sealed class StudyPlanTests
     public void CreateStudyPlan_WithValidParameters_CreatesSuccessfully()
     {
         // Arrange
-        var student = new Student("Moien");
+        var student = new Student(Guid.Parse("ab3ed2ad-ff11-42dd-88c6-ce1ca99ebb11"), "Moien");
         var courses = new List<Course>
         {
             new("Blockchain and HR", TimeSpan.FromHours(8)),
@@ -35,7 +35,7 @@ public sealed class StudyPlanTests
     public void CreateStudyPlan_WithValidParameters_CreatesSuccessfully2()
     {
         // Arrange
-        var student = new Student("Moien");
+        var student = new Student(Guid.Parse("ab3ed2ad-ff11-42dd-88c6-ce1ca99ebb11"), "Moien");
         var courses = new List<Course>
         {
             new("Compensation & Benefits", TimeSpan.FromHours(32))

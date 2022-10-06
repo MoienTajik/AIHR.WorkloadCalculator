@@ -1,4 +1,7 @@
 ﻿using AIHR.Domain;
+using AIHR.Domain.Dtos.Course;
+using AIHR.Domain.Dtos.Student;
+using AIHR.Domain.Dtos.StudyPlan;
 using AIHR.Server.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +49,23 @@ public class StudentController : ControllerBase
             return NotFound(studentId);
         }
 
-        return Ok(student);
+        // NOTE: Use AutoMapper instead
+        var studentDto = new StudentDto(
+            Id: student.Id,
+            Name: student.Name,
+            StudyPlans: student.StudyPlans.Select(studyPlan => new StudyPlanDto(
+                Id: studyPlan.Id,
+                StartDate: studyPlan.StartDate,
+                EndDate: studyPlan.EndDate,
+                TotalWeeksInSelectedDateRange: studyPlan.TotalWeeksInSelectedDateRange,
+                LearningHoursPerWeek: studyPlan.LearningHoursPerWeek,
+                Courses: studyPlan.StudyPlanCourses
+                    .Select(studyPlanCourse => new CourseDto(
+                        Id: studyPlanCourse.CourseId,
+                        Name: studyPlanCourse.Course.Name,
+                        Duration: $"{studyPlanCourse.Course.Duration.TotalHours} hours")
+                    ))));
+        
+        return Ok(studentDto);
     }
 }

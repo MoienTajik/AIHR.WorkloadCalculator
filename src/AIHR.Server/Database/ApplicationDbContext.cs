@@ -60,8 +60,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Student>()
             .HasData(new List<Student>
             {
-                new("Marijn"),
-                new("Moien")
+                new(Guid.Parse("f99e35a2-42a2-4b93-a0de-c194165121d2"), "Marijn"),
+                new(Guid.Parse("ab3ed2ad-ff11-42dd-88c6-ce1ca99ebb11"), "Moien")
             });
     }
 }
