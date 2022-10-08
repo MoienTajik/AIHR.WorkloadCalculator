@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7E11A166
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHR.UnitTests", "tests\AIHR.UnitTests\AIHR.UnitTests.csproj", "{0405C801-DAA3-4E08-A1AB-5B35447E258A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AHR.Client", "src\AHR.Client\AHR.Client.csproj", "{A51CC794-9758-44FF-A6A1-700017CA3AC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHR.Client", "src\AIHR.Client\AIHR.Client.csproj", "{A51CC794-9758-44FF-A6A1-700017CA3AC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

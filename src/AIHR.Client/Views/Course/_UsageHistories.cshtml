@@ -1,0 +1,49 @@
+@model List<AIHR.Domain.Dtos.UsageHistory.UsageHistoryDto>
+
+@if (Model.Any())
+{
+    <div class="grid-table">
+        <div class="row header">
+            <div class="col">Start Date</div>
+            <div class="col">End Date</div>
+            <div class="col">Max hours to learn per day</div>
+            <div class="col">Courses</div>
+        </div>
+
+
+        @foreach (var item in Model)
+        {
+            string style = item.Succeed ? "bg-success" : "bg-danger";
+
+            <div class="row @style bg-opacity-10">
+                <div class="col">@item.StartDate.Date.ToShortDateString()</div>
+                <div class="col">@item.EndDate.Date.ToShortDateString()</div>
+                <div class="col">@item.MaxHoursToLearnPerDay</div>
+                <div class="col">
+                    <button class="btn btn-secondary"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#usage-history-@item.Id"
+                            aria-expanded="false"
+                            aria-controls="usage-history-@item.Id">
+                        See courses
+                    </button>
+                </div>
+            </div>
+
+            <div class=" row collapse usage-history-@item.Id" id="usage-history-@item.Id">
+                @foreach (var course in item.Courses)
+                {
+                    <div class="col">
+                        @course.Name <br/>
+                        <b>@course.Duration.TotalHours hours</b>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>This user does not have any usage histories.</p>
+}
