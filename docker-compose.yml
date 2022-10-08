@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  aihr.client:
+    image: aihr.client:latest
+    container_name: aihr.client
+    networks:
+      - aihr-network
+    build:
+      context: .
+      dockerfile: ./src/AIHR.Client/Dockerfile
+    ports:
+      - "8000:80"
+  aihr.server:
+    image: aihr.server:latest
+    container_name: aihr.server
+    networks:
+      - aihr-network
+    build:
+      context: .
+      dockerfile: ./src/AIHR.Server/Dockerfile
+networks:
+  aihr-network:
+    name: aihr-internal-network
+    driver: bridge
