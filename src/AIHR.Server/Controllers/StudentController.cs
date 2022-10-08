@@ -63,7 +63,7 @@ public class StudentController : ControllerBase
                     .Select(studyPlanCourse => new CourseDto(
                         Id: studyPlanCourse.CourseId,
                         Name: studyPlanCourse.Course.Name,
-                        Duration: $"{studyPlanCourse.Course.Duration.TotalHours} hours")
+                        Duration: studyPlanCourse.Course.Duration)
                     ))));
         
         return Ok(studentDto);

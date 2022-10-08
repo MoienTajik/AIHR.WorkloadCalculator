@@ -13,7 +13,7 @@ public sealed class Student
     {
         if (id == default)
         {
-            throw new ArgumentException("Student id could not be empty.", nameof(id));
+            Id = Guid.NewGuid();
         }
         
         if (string.IsNullOrWhiteSpace(name))
@@ -30,4 +30,6 @@ public sealed class Student
     public string Name { get; private set; }
 
     public ICollection<StudyPlan> StudyPlans { get; set; } = new List<StudyPlan>();
+    
+    public ICollection<UsageHistory> UsageHistories { get; set; } = new List<UsageHistory>();
 }

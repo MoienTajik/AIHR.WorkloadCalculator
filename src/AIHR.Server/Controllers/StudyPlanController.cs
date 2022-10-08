@@ -1,5 +1,4 @@
 ﻿using AIHR.Domain;
-using AIHR.Domain.Dtos;
 using AIHR.Domain.Dtos.StudyPlan;
 using AIHR.Server.Database;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +20,9 @@ public class StudyPlanController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateStudyPlanDto createStudyPlanDto, CancellationToken cancellationToken)
     {
+        // Note: Usage history could be implemented using Audit Logging. This way causes duplication and it's not really -Clean-.
+        var succeed = true;
+        
         // NOTE: It's better to movie this logic to a service inside "application layer" instead of here.
         Student? student = await _db.Students
             .FirstOrDefaultAsync(student => student.Id == createStudyPlanDto.StudentId, cancellationToken);
@@ -29,22 +31,39 @@ public class StudyPlanController : ControllerBase
         {
             return NotFound($"Student with id ({createStudyPlanDto.StudentId}) not found.");
         }
-
+        
         // NOTE 1: This query is not so efficient because it uses "IN Clause" internally and "IN" queries are currently
         // not parameterized by EF-Core. It can replaced by this lib temporary: https://github.com/yv989c/BlazarTech.QueryableValues
         // NOTE 2: Validate all provided CourseIds are found or not?
         var courses = await _db.Courses
             .Where(course => createStudyPlanDto.CourseIds.Contains(course.Id))
             .ToListAsync(cancellationToken);
-
-        var studyPlan = new StudyPlan(student, courses,
-            createStudyPlanDto.StartDate, createStudyPlanDto.EndDate, createStudyPlanDto.MaxHoursToLearnPerDay);
-
-        // NOTE: All the logic in this Action Method should split in Application/Infrastructure layers
-        await _db.StudyPlans.AddAsync(studyPlan, cancellationToken);
-        await _db.SaveChangesAsync(cancellationToken);
         
-        return Ok(studyPlan);
+        try
+        {
+            var studyPlan = new StudyPlan(student, courses,
+                createStudyPlanDto.StartDate, createStudyPlanDto.EndDate, createStudyPlanDto.MaxHoursToLearnPerDay);
+
+            // NOTE: All the logic in this Action Method should split in Application/Infrastructure layers
+            await _db.StudyPlans.AddAsync(studyPlan, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
+
+            return Ok(studyPlan);
+        }
+        catch (Exception)
+        {
+            succeed = false;
+            return BadRequest();
+        }
+        finally
+        {
+            var usageHistory = new UsageHistory(student.Id, 
+                createStudyPlanDto.StartDate, createStudyPlanDto.EndDate, 
+                createStudyPlanDto.MaxHoursToLearnPerDay, courses, succeed);
+
+            await _db.UsageHistories.AddAsync(usageHistory, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
+        }
     }
 
     [HttpDelete("{studyPlanId:int}")]

@@ -3,40 +3,6 @@
     ViewData["Title"] = "Courses";
 }
 
-@section Scripts
-{
-    <script>
-        var checkBoxes = $('.courses-checkbox');
-        checkBoxes.change(function () {
-            $('#calculate-btn').prop('disabled', checkBoxes.filter(':checked').length < 1);
-        });
-        
-        checkBoxes.change();
-    </script>
-
-    <script>
-        $(function() {
-            var studentId = $("#SelectedStudentId").val();
-            $("#study-plan").load(`/Course/GetStudentStudyPlanDetails?studentId=${studentId}`);
-        });
-        
-        $('#SelectedStudentId').change(function(e) {
-            var studentId = $("#SelectedStudentId").val();
-            $("#study-plan").load(`/Course/GetStudentStudyPlanDetails?studentId=${studentId}`);
-        });
-        
-        function deleteStudyPlan(id) {
-            $.ajax({
-                url: `/Course/RemoveStudyPlan/${id}`,
-                type: 'DELETE',
-                success: function(result) {
-                    $(`#study-plan-${id}`).remove();
-                }
-            });
-        }
-    </script>
-}
-
 <form method="post" asp-action="Create" asp-controller="Course">
     <div class="row row-cols-lg-auto g-3 align-items-center">
         <div class="col-12">
@@ -44,7 +10,14 @@
             <select class="form-select" id="SelectedStudentId" name="SelectedStudentId">
                 @foreach (var student in Model.Students)
                 {
-                    <option value="@student.Id">@student.Name</option>
+                    if (student.Id == @Model.SelectedStudentId)
+                    {
+                        <option value="@student.Id" selected="selected">@student.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@student.Id">@student.Name</option>
+                    }
                 }
             </select>
         </div>
@@ -55,7 +28,7 @@
     <div class="mt-3">
         <h2 class="mb-3">Study Plans</h2>
         <div id="study-plan">
-            This user does not have a study plan.
+            This user does not have any study plans.
         </div>
     </div>
     
@@ -65,14 +38,14 @@
         <div class="col-12">
             <label class="form-label" for="start_date">Start Date</label>
             <div class="input-group">
-                <input type="date" date asp-for="StartDate" class="form-control datepicker" placeholder="Select Date">
+                <input type="date" date asp-for="StartDate" id="start-date" class="form-control datepicker" placeholder="Select Date">
             </div>
         </div>
     
         <div class="col-12">
             <label class="form-label" for="end_date">End Date</label>
             <div class="input-group">
-                <input type="date" asp-for="EndDate" class="form-control datepicker" placeholder="Select Date">
+                <input type="date" asp-for="EndDate" id="end-date" class="form-control datepicker" placeholder="Select Date">
             </div>
         </div>
     
@@ -131,7 +104,7 @@
 
                         <th scope="row">@index</th>
                         <td>@Model.Courses[i].Name</td>
-                        <td>@Model.Courses[i].Duration</td>
+                        <td>@Model.Courses[i].Duration.TotalHours hours</td>
 
                         <input type="hidden" asp-for="Courses[i].Id"/>
                         <input type="hidden" asp-for="Courses[i].Name"/>
@@ -142,4 +115,13 @@
             </table>
         </div>
     </div>
+    
+    <hr/>
+    
+     <div class="mt-3">
+         <h2 class="mb-3">Usage Histories</h2>
+         <div id="usage-history">
+             This user does not have any usage histories.
+         </div>
+     </div>
 </form>

@@ -3,6 +3,7 @@ using System;
 using AIHR.Server.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AIHR.Server.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221008072027_AddUsageHistory")]
+    partial class AddUsageHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
@@ -282,21 +284,6 @@ namespace AIHR.Server.Database.Migrations
                     b.ToTable("UsageHistories", (string)null);
                 });
 
-            modelBuilder.Entity("AIHR.Domain.UsageHistoryCourse", b =>
-                {
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UsageHistoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CourseId", "UsageHistoryId");
-
-                    b.HasIndex("UsageHistoryId");
-
-                    b.ToTable("UsageHistoryCourses", (string)null);
-                });
-
             modelBuilder.Entity("AIHR.Domain.StudyPlan", b =>
                 {
                     b.HasOne("AIHR.Domain.Student", "Student")
@@ -338,30 +325,9 @@ namespace AIHR.Server.Database.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("AIHR.Domain.UsageHistoryCourse", b =>
-                {
-                    b.HasOne("AIHR.Domain.Course", "Course")
-                        .WithMany("UsageHistoryCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AIHR.Domain.UsageHistory", "UsageHistory")
-                        .WithMany("UsageHistoryCourses")
-                        .HasForeignKey("UsageHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("UsageHistory");
-                });
-
             modelBuilder.Entity("AIHR.Domain.Course", b =>
                 {
                     b.Navigation("StudyPlanCourses");
-
-                    b.Navigation("UsageHistoryCourses");
                 });
 
             modelBuilder.Entity("AIHR.Domain.Student", b =>
@@ -374,11 +340,6 @@ namespace AIHR.Server.Database.Migrations
             modelBuilder.Entity("AIHR.Domain.StudyPlan", b =>
                 {
                     b.Navigation("StudyPlanCourses");
-                });
-
-            modelBuilder.Entity("AIHR.Domain.UsageHistory", b =>
-                {
-                    b.Navigation("UsageHistoryCourses");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,7 +10,7 @@ public record CourseIndexViewModel(List<CourseIndexViewModel.Course> Courses, Li
 
      public DateTime EndDate { get; set; }
 
-     public int AvailableHoursPerDay { get; set; }
+     public uint AvailableHoursPerDay { get; set; }
      
-     public record Course(Guid Id, string Name, string Duration, bool Selected);
+     public record Course(Guid Id, string Name, TimeSpan Duration, bool Selected);
 }

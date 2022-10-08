@@ -13,8 +13,8 @@ public sealed class StudyPlanTests
         var student = new Student(Guid.Parse("ab3ed2ad-ff11-42dd-88c6-ce1ca99ebb11"), "Moien");
         var courses = new List<Course>
         {
-            new("Blockchain and HR", TimeSpan.FromHours(8)),
-            new("Digital HR", TimeSpan.FromHours(40))
+            new(Guid.Parse("925A6B16-F1D9-459C-9500-5873F8B0B445"), "Blockchain and HR", TimeSpan.FromHours(8)),
+            new(Guid.Parse("0E2AC2B9-813D-4D54-B79F-084C30924FFA"), "Digital HR", TimeSpan.FromHours(40))
         };
 
         // Act
@@ -38,7 +38,7 @@ public sealed class StudyPlanTests
         var student = new Student(Guid.Parse("ab3ed2ad-ff11-42dd-88c6-ce1ca99ebb11"), "Moien");
         var courses = new List<Course>
         {
-            new("Compensation & Benefits", TimeSpan.FromHours(32))
+            new(Guid.Parse("97DCC28D-4A7C-48A2-99C6-361747536033"), "Compensation & Benefits", TimeSpan.FromHours(32))
         };
 
         // Act

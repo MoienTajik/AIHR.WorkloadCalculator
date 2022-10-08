@@ -1,5 +1,4 @@
-﻿using AIHR.Domain.Dtos;
-using AIHR.Domain.Dtos.Course;
+﻿using AIHR.Domain.Dtos.Course;
 using AIHR.Server.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +21,7 @@ public class CourseController : ControllerBase
     {
         // NOTE: It's better to move mapping & queries to a repository inside "infrastructure layer" instead of here.
         var courses = await _db.Courses
-            .Select(course => new CourseDto(course.Id, course.Name, $"{course.Duration.TotalHours} hours"))
+            .Select(course => new CourseDto(course.Id, course.Name, course.Duration))
             .ToListAsync(cancellationToken);
 
         return Ok(courses);

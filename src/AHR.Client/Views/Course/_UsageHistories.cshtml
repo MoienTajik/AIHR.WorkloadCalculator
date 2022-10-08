@@ -1,0 +1,49 @@
+@model List<AIHR.Domain.Dtos.UsageHistory.UsageHistoryDto>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Max hours to learn per day</th>
+            <th scope="col">Courses</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model)
+        {
+            string style = item.Succeed ? "table-success" : "table-danger";
+
+            <tr class="@style">
+                <td>@item.StartDate</td>
+                <td>@item.EndDate</td>
+                <td>@item.MaxHoursToLearnPerDay</td>
+                <td>
+                    <button class="btn btn-secondary"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#usage-history-@item.Id"
+                            aria-expanded="false"
+                            aria-controls="usage-history-@item.Id">
+                        See courses
+                    </button>
+                </td>
+            </tr>
+            
+            <tr class="collapse usage-history-@item.Id" id="usage-history-@item.Id">
+                @foreach (var course in item.Courses)
+                {
+                    <td>@course.Name - @course.Duration.TotalHours hours</td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>This user does not have any usage histories.</p>
+}

@@ -4,6 +4,7 @@ using AIHR.Domain.Dtos;
 using AIHR.Domain.Dtos.Course;
 using AIHR.Domain.Dtos.Student;
 using AIHR.Domain.Dtos.StudyPlan;
+using AIHR.Domain.Dtos.UsageHistory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AHR.Client.Controllers;
@@ -17,7 +18,7 @@ public class CourseController : Controller
         _serverHttpClient = httpClientFactory.CreateClient(Constants.AihrServerHttpClientName);
     }
 
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public async Task<IActionResult> Index(Guid? selectedStudentId, CancellationToken cancellationToken)
     {
         var courses = await _serverHttpClient.GetFromJsonAsync<IEnumerable<CourseDto>>("/api/Course", cancellationToken);
         var coursesVm = courses!
@@ -30,7 +31,11 @@ public class CourseController : Controller
 
         var students = (await _serverHttpClient.GetFromJsonAsync<List<Student>>("/api/Student", cancellationToken))!;
 
-        var courseIndexVm = new CourseIndexViewModel(coursesVm, students);
+        var courseIndexVm = new CourseIndexViewModel(coursesVm, students)
+        {
+            SelectedStudentId = selectedStudentId ?? Guid.Empty
+        };
+        
         var errors = TempData[Constants.ErrorsTempDataKey];
         if (errors is not null)
         {
@@ -51,6 +56,12 @@ public class CourseController : Controller
         return PartialView("_StudyPlan", student.StudyPlans);
     }
     
+    public async Task<IActionResult> GetStudentUsageHistories(Guid studentId, CancellationToken cancellationToken)
+    {
+        var usageHistories = await _serverHttpClient.GetFromJsonAsync<List<UsageHistoryDto>>($"/api/UsageHistory/{studentId}", cancellationToken);
+        return PartialView("_UsageHistories", usageHistories);
+    }
+    
     public async Task<IActionResult> Create(CourseIndexViewModel model, CancellationToken cancellationToken)
     {
         CreateStudyPlanDto createStudyPlanDto = GenerateCreateStudyPlanDto();
@@ -61,7 +72,7 @@ public class CourseController : Controller
             TempData[Constants.ErrorsTempDataKey] = errorDto?.Error;
         }
         
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", new { selectedStudentId = model.SelectedStudentId });
 
         CreateStudyPlanDto GenerateCreateStudyPlanDto()
         {
@@ -69,7 +80,7 @@ public class CourseController : Controller
                 .Where(course => course.Selected)
                 .Select(course => course.Id);
 
-            return new(model.SelectedStudentId, selectedCourseIds, model.StartDate, model.EndDate, (uint?)model.AvailableHoursPerDay);
+            return new(model.SelectedStudentId, selectedCourseIds, model.StartDate, model.EndDate, model.AvailableHoursPerDay);
         }
     }
 

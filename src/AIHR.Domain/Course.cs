@@ -9,8 +9,13 @@ public sealed class Course
     {
     }
     
-    public Course(string name, TimeSpan duration)
+    public Course(Guid id, string name, TimeSpan duration)
     {
+        if (id == default)
+        {
+            Id = Guid.NewGuid();
+        }
+        
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentNullException(nameof(name));
@@ -21,7 +26,7 @@ public sealed class Course
             throw new ArgumentException("Duration could not be empty.", nameof(duration));
         }
 
-        Id = Guid.NewGuid();
+        Id = id;
         Name = name;
         Duration = duration;
     }
@@ -33,4 +38,6 @@ public sealed class Course
     public TimeSpan Duration { get; private set; }
 
     public ICollection<StudyPlanCourse> StudyPlanCourses { get; private set; } = default!;
+    
+    public ICollection<UsageHistoryCourse> UsageHistoryCourses { get; private set; } = default!;
 }
