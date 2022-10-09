@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		.dockerignore = .dockerignore
+		docker-compose.yml = docker-compose.yml
+		README.md = README.md
+		run.sh = run.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIHR.Domain", "src\AIHR.Domain\AIHR.Domain.csproj", "{42861DA7-7585-42D2-A3A6-3BCC1EAD0E25}"
