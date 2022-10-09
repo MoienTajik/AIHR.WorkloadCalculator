@@ -8,10 +8,14 @@ First, navigate to the root of the project.
 ./run.sh
 ```
 
+Navigate to http://localhost:8000
+
 2. **Easier recommened way**:
 ```bash
 docker compose up -d
 ```
+
+Navigate to http://localhost:8000
 
 <hr/>
 
