@@ -1,5 +1,13 @@
 version: "3.9"
 services:
+  aihr.server:
+    image: aihr.server:latest
+    container_name: aihr.server
+    networks:
+      - aihr-network
+    build:
+      context: .
+      dockerfile: ./src/AIHR.Server/Dockerfile
   aihr.client:
     image: aihr.client:latest
     container_name: aihr.client
@@ -10,14 +18,8 @@ services:
       dockerfile: ./src/AIHR.Client/Dockerfile
     ports:
       - "8000:80"
-  aihr.server:
-    image: aihr.server:latest
-    container_name: aihr.server
-    networks:
-      - aihr-network
-    build:
-      context: .
-      dockerfile: ./src/AIHR.Server/Dockerfile
+    depends_on:
+      - aihr.server
 networks:
   aihr-network:
     name: aihr-internal-network
