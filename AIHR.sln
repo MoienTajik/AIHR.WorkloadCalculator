@@ -5,7 +5,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{68D5DA8C-4B9C-48E5-AE13-9A4784A59B20}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		AIHR.sln.DotSettings = AIHR.sln.DotSettings
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 	EndProjectSection
